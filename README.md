@@ -1,118 +1,153 @@
-# 🛡️Fraud-Detection---Machine-Learning-Project
+# 🛡️ Fraud Detection - Machine Learning Project
 
-This project aims to build a fraud detection system for banking transactions using a combination of unsupervised learning (clustering) and semi-supervised learning (pseudo-label augmentation). The system can automatically identify suspicious transactions, helping banks reduce financial losses and strengthen security.
+A machine learning system to detect fraudulent banking transactions using unsupervised clustering (HDBSCAN) and semi-supervised learning (pseudo-label augmentation), validated with a supervised XGBoost baseline. The goal is to identify suspicious transactions to help banks reduce financial losses and strengthen security.
 
-**🚀 Live Demo**: [Fraudulent Bank Transaction App](https://fraudulent-bank-transaction.streamlit.app/)
+🚀 Live Demo: https://fraudulent-bank-transaction.streamlit.app/
 
-**📖 Project Overview**
+---
+
+## 📖 Project Overview
 
 Cybercrime banking fraud is a growing threat targeting customers and financial institutions through skimming, phishing, and malware attacks. Traditional fraud detection systems often struggle with imbalanced datasets where fraudulent transactions are very rare.
 
 To address this, we developed a semi-supervised fraud detection pipeline:
 
--Unsupervised clustering with HDBSCAN to discover hidden patterns.
+- **Unsupervised clustering** with **HDBSCAN** to discover hidden patterns
+- **Pseudo-label generation** to classify suspicious vs. normal transactions
+- **Supervised XGBoost baseline** to validate performance
 
--Pseudo-label generation to classify suspicious vs. normal transactions.
+---
 
--Supervised XGBoost baseline to validate performance.
+## 👨‍💻 Team Members (Group 6)
 
-**📊 Dataset**
+- Sandy Agatha Indra Lim – 2702213530
+- Vania Oriana Tanoto – 2702209483
+- Ricky Atha Ajie Alvianto – 2702279086
 
-We used the Bank Transaction Fraud Detection Dataset
- from LOL Bank Pvt. Ltd.
+---
 
-Size: ~200,000 rows × 24 features
+## 📊 Dataset
 
-Key Features:
+We used the Kaggle dataset: Bank Transaction Fraud Detection by LOL Bank Pvt. Ltd.
 
--Customer_ID, Transaction_ID
+- Kaggle: https://www.kaggle.com/datasets/marusagar/bank-transaction-fraud-detection
+- Size: ~200,000 rows × 24 features
+- Key features:
+  - `Customer_ID`, `Transaction_ID`
+  - `Transaction_Amount`, `Transaction_Type`, `Merchant_Category`
+  - `Device_Type`, `Transaction_Location`
+  - `Is_Fraud` (1 = Fraud, 0 = Normal)
 
--Transaction_Amount, Transaction_Type, Merchant_Category
+---
 
--Device_Type, Transaction_Location
+## 🔎 Exploratory Data Analysis (EDA)
 
--Is_Fraud (1 = Fraud, 0 = Normal)
+- Fraud cases are rare (<1%), making the dataset imbalanced
+- Transaction amounts are fairly evenly distributed without extreme outliers
+- No missing values detected
+- Encoding applied:
+  - Label Encoding: `Gender`
+  - One-Hot Encoding: `Account_Type`, `Transaction_Type`, `Merchant_Category`, `Device_Type`
 
-**🔎 Exploratory Data Analysis (EDA)**
+---
 
--Fraud cases are rare (<1%), making the dataset imbalanced.
+## ⚙️ Methodology
 
--Transaction amounts are fairly evenly distributed without extreme outliers.
+### 1) Feature Selection
 
--No missing values detected.
+- Used XGBoost feature importance
+- Kept only features with contribution ≥ 2%
 
-**-Encoding applied:**
+### 2) Experiments
 
--Label Encoding: Gender
+- Tested clustering models: KMeans, DBSCAN, Gaussian Mixture (GMM)
+- Best performance from **HDBSCAN** (Silhouette score: 0.34)
 
--One-Hot Encoding: Account type, transaction type, merchant category, device type
+### 3) Semi-Supervised Learning (Main Approach)
 
-**⚙️ Methodology**
-1. Feature Selection
+1. Apply HDBSCAN to generate pseudo-labels
+2. Train XGBoost on pseudo-labeled data
+3. Validate performance with limited ground-truth labels
 
--Used XGBoost feature importance
+---
 
--Kept only features with contribution ≥ 2%
+## ✅ Results
 
-2. Experiments
+- HDBSCAN alone struggled to form clear fraud clusters
+- Pseudo-label augmentation + XGBoost significantly improved detection
+- Final model achieved strong recall for fraud detection, suitable for real-time monitoring systems
 
--Tested clustering models: KMeans, DBSCAN, GMM
+---
 
--Best performance from HDBSCAN (Silhouette score: 0.34)
+## 💻 Installation & Usage
 
-3. Semi-Supervised Learning (Main Approach)
+### Requirements
 
--Apply HDBSCAN to generate pseudo-labels.
+Install dependencies:
 
--Train XGBoost on pseudo-labeled data.
+```bash
+pip install -r requirements.txt
+```
 
--Validate performance with limited ground-truth labels.
+Key libraries: `numpy`, `pandas`, `matplotlib`, `seaborn`, `scikit-learn`, `xgboost`, `hdbscan`, `streamlit`
 
-**✅ Results**
+### Running the Notebook
 
--HDBSCAN alone struggled to form clear fraud clusters.
-
--Pseudo-label augmentation + XGBoost significantly improved detection.
-
--The final model achieved strong recall for fraud detection, making it suitable for real-time monitoring systems.
-
-**💻 Installation & Usage**
-**Requirements**
-
-Make sure you have the following installed:
-
-**pip install -r requirements.txt**
-
-
-Key dependencies:
-
--numpy, pandas, matplotlib, seaborn
-
--scikit-learn
-
--xgboost
-
--hdbscan
-
--streamlit
-
-Running the Notebook
+```bash
 jupyter notebook main.ipynb
+```
 
-Running the Streamlit App
-streamlit run app.py
+### Running the Streamlit App
 
-**🌐 Application**
+```bash
+streamlit run streamlit_app.py
+```
 
-We deployed a prototype on Streamlit:
-👉 [Fraudulent Bank Transaction App](https://fraudulent-bank-transaction.streamlit.app/)
+---
+
+## 🌐 Application
+
+Prototype deployed on Streamlit: https://fraudulent-bank-transaction.streamlit.app/
 
 Users can input transaction details and instantly check if a transaction is fraudulent or normal.
 
-**📌 Key Takeaways**
+---
 
--Fraudulent transactions are rare and scattered across clusters.
+## 🗂️ Project Structure
 
--Pure clustering methods are not enough — semi-supervised approaches are more effective.
+```
+Code/
+├─ Bank_Transaction_Fraud_Detection.csv    # Dataset (sample)
+├─ encoder.pkl                             # Trained categorical encoder
+├─ scaler.pkl                              # Trained feature scaler
+├─ selected_features.json                  # Selected features metadata
+├─ fraud_detection_model_pseudolabel.json  # Trained XGBoost model (pseudo-labeled)
+├─ main.ipynb                              # End-to-end analysis & training notebook
+├─ streamlit_app.py                        # Streamlit UI for inference
+├─ requirements.txt                        # Project dependencies
+├─ README.md                               # This file
+├─ Final Report.pdf                        # Detailed report
+└─ Project Presentation.pdf                # Slide deck
+```
 
--The system can be integrated as a real-time fraud detection tool in banking applications.
+---
+
+## 📌 Key Takeaways
+
+- Fraudulent transactions are rare and scattered across clusters
+- Pure clustering methods are not enough — semi-supervised approaches are more effective
+- The system can be integrated as a real-time fraud detection tool in banking applications
+
+---
+
+## 🔧 Reproducibility Notes
+
+- Ensure consistent Python environment using the provided `requirements.txt`
+- If running Streamlit locally, keep `encoder.pkl`, `scaler.pkl`, `selected_features.json`, and `fraud_detection_model_pseudolabel.json` in the same directory as `streamlit_app.py`
+- If you change feature engineering, regenerate artifacts to match the app’s expectations
+
+---
+
+## 📝 License
+
+This project is for academic purposes. Please cite the dataset owner and this repository when using or extending the work.
