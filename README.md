@@ -18,14 +18,6 @@ To address this, we developed a semi-supervised fraud detection pipeline:
 
 ---
 
-## 👨‍💻 Team Members (Group 6)
-
-- Sandy Agatha Indra Lim – 2702213530
-- Vania Oriana Tanoto – 2702209483
-- Ricky Atha Ajie Alvianto – 2702279086
-
----
-
 ## 📊 Dataset
 
 We used the Kaggle dataset: Bank Transaction Fraud Detection by LOL Bank Pvt. Ltd.
